@@ -68,12 +68,12 @@ typedef struct file {
  *     Invalid fd member (revents only).
  */
 
-#define POLLIN       (0x01) 
+#define POLLIN       (0x01)
 #define POLLRDNORM   (0x01)
 #define POLLRDBAND   (0x01)
 #define POLLPRI      (0x01)
 
-#define POLLOUT      (0x02) 
+#define POLLOUT      (0x02)
 #define POLLWRNORM   (0x02)
 #define POLLWRBAND   (0x02)
 
@@ -109,7 +109,7 @@ namespace driver {
 class device
 {
 public:
-    device(PCSTR name, s32 id);
+    device(PCSTR devname, s32 devid);
     ~device(void);
 
 public:
@@ -117,7 +117,7 @@ public:
     s32 _id;
     s32 _irq;
     u32 _handle;
-    
+
 	PCSTR _devname;
 	s32 _devid;
 	u32 _devhandle;
@@ -141,7 +141,7 @@ public:
     semaphore *_lock;
 	void    lock(void) { do {} while (_lock->pend(OS_WAIT_FOREVER) != true); }
 	void    unlock(void) { _lock->post(OS_WAIT_FOREVER); }
-    
+
     virtual s32 open(void);
     virtual s32 close(void);
     virtual s32 read(u8 *buf, u32 size);
@@ -152,8 +152,8 @@ public:
     virtual s32 tell(void);
     virtual s32 flush(void);
     bool    is_open(void) { return _open_count > 0; }
-    
-    
+
+
 protected:
     virtual void	poll_notify(pollevent_t events);
     virtual s32	open_first(void);

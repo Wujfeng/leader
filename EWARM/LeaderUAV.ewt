@@ -3501,6 +3501,9 @@
       <group>
         <name>topics</name>
         <file>
+          <name>$PROJ_DIR$\..\src\modules\uORB\topics\satellite_info.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\src\modules\uORB\topics\vehicle_attitude.h</name>
         </file>
         <file>

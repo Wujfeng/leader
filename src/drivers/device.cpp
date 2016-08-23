@@ -12,12 +12,12 @@
 
 namespace driver {
 
-device::device(PCSTR name, s32 id) :
-	_name(name),
-    _id(id),
+device::device(PCSTR devname, s32 devid) :
+	_name(devname),
+    _id(devid),
     _handle(NULL),
-    _devname(name),
-    _devid(id),
+    _devname(devname),
+    _devid(devid),
     _devhandle(NULL),
     _irq(-1),
     _probed(0)
@@ -177,10 +177,10 @@ s32 device::flush(void)
 s32 device::poll(struct pollfd *fds, s32 timeoutms)
 {
 	s32 ret = LD_OK;
-	
+
     _pollset.events = fds->events;
 	_pollset.sem->pend(timeoutms);
-	
+
 	lock();
 	if (fds->events & _pollset.revents) {
 		fds->revents & _pollset.revents;
@@ -189,7 +189,7 @@ s32 device::poll(struct pollfd *fds, s32 timeoutms)
 		ret = LD_ERROR;
 	}
 	unlock();
-			
+
 	return ret;
 }
 
@@ -208,12 +208,12 @@ void device::poll_notify(pollevent_t events)
 	//DEV_DBG(" Events fds=%p %0x %0x %0x %d", _pollset, _pollset.revents, _pollset.events, events, value);
 
 	unlock();
-	
+
 	/* if the state is now interesting, wake the waiter if it's still asleep */
 	/* XXX semcount check here is a vile hack; counting semphores should not be abused as cvars */
 	if ((_pollset.revents != 0) && (value <= 0)) {
 		_pollset.sem->post(OS_WAIT_FOREVER);
-	}	
+	}
 }
 
 

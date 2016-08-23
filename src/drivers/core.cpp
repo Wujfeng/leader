@@ -1,5 +1,5 @@
 /*******************************Copyright (c)***************************
-** 
+**
 ** Porject name:	leader
 ** Created by:		zhuzheng<happyzhull@163.com>
 ** Created date:	2016/04/05
@@ -56,14 +56,14 @@ void core::dwt_config(void)
 	//DWTCR寄存器的第0位,当为1的时候使能CYCCNT计数器,使用CYCCNT之前应当先初始化
 	#define  BIT_DWT_CR_CYCCNTENA	(1 << 0)
 
-    CoreDebug->DEMCR |= BIT_DEM_CR_TRCENA;  //使用DWT  Enable Cortex-M4's DWT CYCCNT reg.   
+    CoreDebug->DEMCR |= BIT_DEM_CR_TRCENA;  //使用DWT  Enable Cortex-M4's DWT CYCCNT reg.
 	DWT->CYCCNT = 0u;					    //初始化CYCCNT寄存器
 	DWT->CTRL |= BIT_DWT_CR_CYCCNTENA;	    //开启CYCCNT
 }
 
 /**
   * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
+  *         The system Clock is configured as follow :
   *            System Clock source            = PLL (HSE)
   *            SYSCLK(Hz)                     = 168000000
   *            HCLK(Hz)                       = 168000000
@@ -88,19 +88,19 @@ void core::system_clock_config(void)
 
   	/* Enable Power Control clock */
   	__HAL_RCC_PWR_CLK_ENABLE();
-  
-  	/* The voltage scaling allows optimizing the power consumption when the device is 
-     	clocked below the maximum system frequency, to update the voltage scaling value 
+
+  	/* The voltage scaling allows optimizing the power consumption when the device is
+     	clocked below the maximum system frequency, to update the voltage scaling value
      	regarding system frequency refer to product datasheet.  */
   	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  
+
   	/* Enable HSE Oscillator and activate PLL with HSE as source */
   	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
 
-#if !defined  (HSE_VALUE) 
+#if !defined  (HSE_VALUE)
 #error "No macro definition HSE_VALUE, Please check..."
 #endif
 
@@ -115,14 +115,14 @@ void core::system_clock_config(void)
   	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   	RCC_OscInitStruct.PLL.PLLQ = 7;
   	HAL_RCC_OscConfig(&RCC_OscInitStruct);
-  
-  	/* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
+
+  	/* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
      	clocks dividers */
   	RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
   	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
-  	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;  
+  	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
   	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
   	/* STM32F405x/407x/415x/417x Revision Z devices: prefetch is supported  */
@@ -131,7 +131,7 @@ void core::system_clock_config(void)
     		/* Enable the Flash prefetch */
     		__HAL_FLASH_PREFETCH_BUFFER_ENABLE();
   	}
-    
+
     return;
 }
 
@@ -214,6 +214,17 @@ u32 core::convert_timestamp_to_ms (timestamp_t timestamp)
 	return (u32)(timestamp / s_freq_khz);
 }
 
+timestamp_t core::convert_us_to_timestamp (u32 us)
+{
+	return (timestamp_t)(us * s_freq_mhz);
+}
+
+timestamp_t core::convert_ms_to_timestamp (u32 ms)
+{
+	return (timestamp_t)(ms * s_freq_khz);
+}
+
+
 
 void core::self_test(void)
 {
@@ -236,7 +247,7 @@ void core::self_test(void)
         core::mdelay(ms);
         STOP_PROFILE(str);
     }
-  
+
 #if 1
     core::mdelay(10000);
     for (cnt = 0; cnt < 30; cnt++) {
@@ -248,7 +259,7 @@ void core::self_test(void)
     for (cnt = 0; cnt < 30; cnt++) {
         core::udelay(1000000);
     }
-    
+
     INF("End test PROFILE....\n");
 
 

@@ -289,13 +289,10 @@ gps::~gps(void)
 s32 gps::probe(uart *puart)
 {
     ASSERT(puart != NULL);
-
-	if (device::probe() < 0) {
-		ERR("%s: failed to probe.\n", _name);
-		goto fail0;
-	}
-
     _uart = puart;
+    
+    _uart->open();
+    
 
     u8 buf[] = {
         "$GNRMC,111808.00,A,3106.06235,N,12115.08438,E,0.204,,310716,,,A*6C    \
